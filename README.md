@@ -38,15 +38,15 @@ GitHub and share the repository with your marker. You will be marked on frequent
 to the repository and the usage of git features.
 ## Documentation
 Documentation of your implementation is required. You will need to provide the following:
-⚫ Describe the organisation of your Git repository and how you used it during the
+# ⚫ Describe the organisation of your Git repository and how you used it during the
 development of your solution
-⚫ Description of data structures used in the client and server to represent the various
+# ⚫ Description of data structures used in the client and server to represent the various
 entities, e.g.: users, groups, channels, etc.
-⚫ A description of how you divide the responsibilities between client and server (you are
+# ⚫ A description of how you divide the responsibilities between client and server (you are
 encouraged to have the server provide a REST API which returns JSON in addition to a
 static directory)
-⚫ A list of routes, parameters, return values, and purpose
-⚫ Angular architecture: components, services, models, routes
-⚫ Describe the details of the interaction between client and server by indicating how the
+# ⚫ A list of routes, parameters, return values, and purpose
+# ⚫ Angular architecture: components, services, models, routes
+# ⚫ Describe the details of the interaction between client and server by indicating how the
 files and global vars in server side will be changed and how the display of each angular
 component page will be updated
