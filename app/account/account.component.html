@@ -1,0 +1,17 @@
+<h2>Create a New Account</h2>
+
+<form (ngSubmit)="createUser()">
+  <label for="username">Username:</label>
+  <input id="username" [(ngModel)]="username" name="username" required />
+
+  <label for="email">Email:</label>
+  <input id="email" [(ngModel)]="email" name="email" required />
+
+  <button type="submit">Create Account</button>
+</form>
+
+<!-- Self-deletion -->
+<div *ngIf="currentUser">
+  <h3>Delete Your Account</h3>
+  <button (click)="deleteAccount()">Delete Account</button>
+</div>
