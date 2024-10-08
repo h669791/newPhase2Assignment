@@ -1,36 +1,32 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+// src/app/profile/profile.component.ts
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [FormsModule],
-  templateUrl: './profile.component.html',
+  imports: [CommonModule],
+  template: `
+    <h2>Profile</h2>
+    <p>Username: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <button (click)="loadProfile()">Refresh Profile</button>
+  `,
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
-  username = '';
-  email = '';
-  currentUser: any;
+export class ProfileComponent implements OnInit {
+  user: any = {};
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-    this.username = this.currentUser.username;
-    this.email = this.currentUser.email;
+    this.loadProfile();
   }
 
-  updateProfile() {
-    const updatedUser = { username: this.username, email: this.email };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-    console.log('Profile updated:', updatedUser);
-  }
-  
-
-  updateUserData() {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userIndex = users.findIndex((u: any) => u.username === this.currentUser.username);
-    users[userIndex] = this.currentUser;
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('user', JSON.stringify(this.currentUser));
+  loadProfile() {
+    this.http.get('/api/profile').subscribe(user => {
+      this.user = user;
+    });
   }
 }

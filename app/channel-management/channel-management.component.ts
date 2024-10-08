@@ -1,39 +1,46 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+// src/app/channel-management/channel-management.component.ts
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-channel-management',
   standalone: true,
-  imports: [FormsModule,CommonModule],
-  templateUrl: './channel-management.component.html',
+  imports: [CommonModule, FormsModule],
+  template: `
+    <h2>Channel Management</h2>
+    <form (ngSubmit)="createChannel()">
+      <label for="channelName">Channel Name:</label>
+      <input id="channelName" [(ngModel)]="channelName" name="channelName" required />
+      <button type="submit">Create Channel</button>
+    </form>
+    <ul>
+      <li *ngFor="let channel of channels">{{ channel.name }}</li>
+    </ul>
+  `,
   styleUrls: ['./channel-management.component.css']
 })
-export class ChannelManagementComponent {
+export class ChannelManagementComponent implements OnInit {
   channelName = '';
-  channels: string[] = [];
-  currentUser: any;
+  channels: any[] = [];
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-    this.channels = this.currentUser.channels || [];
+    this.loadChannels();
+  }
+
+  loadChannels() {
+    this.http.get<any[]>('/api/channels').subscribe(channels => {
+      this.channels = channels;
+    });
   }
 
   createChannel() {
-    this.channels.push(this.channelName);  // Add to channels array
-    this.channelName = '';  // Clear the input field
-  }
-
-  deleteChannel(channel: string) {
-    this.channels = this.channels.filter(c => c !== channel);  // Remove the channel
-  }
-
-  updateUserData() {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userIndex = users.findIndex((u: any) => u.username === this.currentUser.username);
-    users[userIndex].channels = this.channels;
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('user', JSON.stringify(this.currentUser));
+    this.http.post('/api/createChannel', { channelName: this.channelName }).subscribe(() => {
+      this.loadChannels(); // Refresh channel list
+      this.channelName = ''; // Clear input
+    });
   }
 }
